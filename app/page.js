@@ -1,8 +1,9 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { Environment, OrbitControls, Sky } from '@react-three/drei';
-import Box from './components/balloon';
+import { OrbitControls, Sky } from '@react-three/drei';
+import { Balloon } from './components/Balloon0';
+import Castle from './components/Castle';
 
 export default function IndexPage() {
   return (
@@ -13,16 +14,20 @@ export default function IndexPage() {
     >
       <OrbitControls />
       <Sky
-        sunPosition={[0, 1, -300]}
+        distance={450000} // 카메라에서의 스카이박스 거리
+        sunPosition={[0, 1, -100]} // 태양의 위치
+        inclination={0.49} // 하늘 빛 기울기
+        azimuth={0.5} // 태양의 위치(방향)
         turbidity={10}
         rayleigh={2}
         mieCoefficient={0.005}
         mieDirectionalG={0.8}
       />
-      {/* <ambientLight intensity={Math.PI / 2} /> */}
-      <Environment preset="sunset" />
-      <Box position={[-1.2, 0, 0]} />
-      <Box position={[1.2, 0, 0]} />
+      <Balloon position={[0, 5, -25]} />
+      {/* <Ground /> */}
+      {/* <Terrain position={[0,-50,0]} scale={2}/> */}
+      {/* <ambientLight intensity={5.5} /> */}
+      <Castle position={[0, -60, 0]} />
     </Canvas>
   );
 }
