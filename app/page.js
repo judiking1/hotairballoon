@@ -5,8 +5,9 @@ import { Cloud, Clouds, Float, OrbitControls, Sky } from '@react-three/drei';
 import Castle from './components/Castle';
 import { random } from 'maath';
 import { MeshLambertMaterial, NoToneMapping } from 'three';
-import { Balloon } from './components/Balloon';
-import { BalloonTwo } from './components/BalloonTwo';
+import { BalloonNear } from './components/BalloonNear';
+import { balloonsFarData, balloonsNearData } from './components/balloonsData';
+import { BalloonFar } from './components/BalloonFar';
 
 const box = random.inBox(new Float32Array(20 * 3), { sides: [4, 1, 4] });
 const spherical = random.onSphere(box, { radius: 1 });
@@ -26,10 +27,12 @@ export default function IndexPage() {
     >
       <OrbitControls
         target={[0, 60, 0]}
-        minDistance={10}
-        maxDistance={200}
+        minDistance={50}
+        maxDistance={150}
         minPolarAngle={-Math.PI / 2}
         maxPolarAngle={Math.PI / 2}
+        maxAzimuthAngle={Math.PI / 4}
+        minAzimuthAngle={-Math.PI / 4}
       />
       <Sky
         distance={500000}
@@ -55,8 +58,12 @@ export default function IndexPage() {
           />
         </Float>
       </Clouds>
-      <Balloon radius={80} speed={0.2} height={150} initialAngle={0} />
-      <BalloonTwo radius={80} speed={0.2} height={150} initialAngle={3.14} />
+      {balloonsFarData.map((props, idx) => (
+        <BalloonFar key={idx} {...props} />
+      ))}
+      {balloonsNearData.map((props, idx) => (
+        <BalloonNear key={idx} {...props} />
+      ))}
       <ambientLight intensity={5.5} />
       <Castle position={[0, -50, 0]} scale={[5, 5, 5]} />
     </Canvas>
