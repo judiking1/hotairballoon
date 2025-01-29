@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
+import { MathUtils } from 'three';
 
 export function BalloonFar({
   modelPath,
@@ -15,10 +16,12 @@ export function BalloonFar({
 
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
-  const scaleValue = hovered ? hoverScale : baseScale;
 
   const offset = Math.random() * 1000;
 
+  useEffect(() => {
+    document.body.style.cursor = hovered ? 'pointer' : 'auto';
+  }, [hovered]);
   useFrame((state) => {
     if (!groupRef.current) return;
 
@@ -30,14 +33,21 @@ export function BalloonFar({
     const newY = originalPos[1] + Math.sin(t) * floatRange;
 
     groupRef.current.position.set(originalPos[0], newY, originalPos[2]);
+    groupRef.current.scale.x =
+      groupRef.current.scale.y =
+      groupRef.current.scale.z =
+        MathUtils.lerp(
+          groupRef.current.scale.z,
+          hovered ? hoverScale : baseScale,
+          0.1
+        );
   });
 
   return (
     <group
       ref={groupRef}
-      scale={scaleValue}
-      onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}
+      onPointerEnter={(e) => (e.stopPropagation(), setHover(true))}
+      onPointerLeave={(e) => setHover(false)}
       onClick={() => setActive(!active)}
     >
       {scene.children.map((child) => (

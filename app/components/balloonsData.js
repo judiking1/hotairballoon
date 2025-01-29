@@ -11,7 +11,7 @@ export const balloonsNearData = [
     height: 100,
     initialAngle: 0,
     baseScale: 50,
-    hoverScale: 55,
+    hoverScale: 80,
     rotationSpeed: 0.8,
   },
   {
@@ -21,7 +21,7 @@ export const balloonsNearData = [
     height: 100,
     initialAngle: Math.PI,
     baseScale: 0.5,
-    hoverScale: 0.55,
+    hoverScale: 0.8,
     rotationSpeed: 0.8,
   }
 ];
@@ -35,11 +35,11 @@ export const balloonsFarData = Array.from({ length: 40 }).map(() => {
   if (randomIndex === 0) {
     // balloon0.glb인 경우
     baseScale = (Math.random() - 0.5) * 20 + 35;
-    hoverScale = baseScale * 1.1;
+    hoverScale = baseScale * 1.5;
   } else {
     // balloon2.glb, balloon3.glb인 경우
     baseScale = (Math.random() - 0.5) * 1 + 0.8;
-    hoverScale = baseScale * 1.1;
+    hoverScale = baseScale * 1.5;
   } 
   const x = (Math.random() - 0.5) * 1000;
   const y = 150 + Math.random() * 100;

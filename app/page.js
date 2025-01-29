@@ -1,7 +1,15 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { Cloud, Clouds, Float, OrbitControls, Sky } from '@react-three/drei';
+import {
+  Bvh,
+  Cloud,
+  Clouds,
+  Float,
+  Instances,
+  OrbitControls,
+  Sky,
+} from '@react-three/drei';
 import Castle from './components/Castle';
 import { random } from 'maath';
 import { MeshLambertMaterial, NoToneMapping } from 'three';
@@ -58,12 +66,14 @@ export default function IndexPage() {
           />
         </Float>
       </Clouds>
-      {balloonsFarData.map((props, idx) => (
-        <BalloonFar key={idx} {...props} />
-      ))}
-      {balloonsNearData.map((props, idx) => (
-        <BalloonNear key={idx} {...props} />
-      ))}
+      <Bvh firstHitOnly>
+        {balloonsFarData.map((props, idx) => (
+          <BalloonFar key={idx} {...props} />
+        ))}
+        {balloonsNearData.map((props, idx) => (
+          <BalloonNear key={idx} {...props} />
+        ))}
+      </Bvh>
       <ambientLight intensity={5.5} />
       <Castle position={[0, -50, 0]} scale={[5, 5, 5]} />
     </Canvas>

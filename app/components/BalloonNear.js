@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
+import { MathUtils } from 'three';
 
 export function BalloonNear({
   radius = 80,
@@ -18,6 +19,10 @@ export function BalloonNear({
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
 
+  useEffect(() => {
+    document.body.style.cursor = hovered ? 'pointer' : 'auto';
+  }, [hovered]);
+
   useFrame((state) => {
     if (!groupRef.current) return;
     const t = state.clock.getElapsedTime();
@@ -32,19 +37,24 @@ export function BalloonNear({
 
     // 풍선 몸체 살짝 회전
     groupRef.current.rotation.y = Math.sin(t) * rotationSpeed;
+    groupRef.current.scale.x =
+      groupRef.current.scale.y =
+      groupRef.current.scale.z =
+        MathUtils.lerp(
+          groupRef.current.scale.z,
+          hovered ? hoverScale : baseScale,
+          0.1
+        );
   });
 
-  const scaleValue = hovered ? hoverScale : baseScale;
-console.log(scene);
   return (
     <group
       ref={groupRef}
       dispose={null}
-      scale={scaleValue}
-      onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}
-      onClick={() => {setActive(!active)
-        console.log(scaleValue);
+      onPointerEnter={(e) => (e.stopPropagation(), setHover(true))}
+      onPointerLeave={(e) => setHover(false)}
+      onClick={() => {
+        setActive(!active);
       }}
     >
       {scene.children.map((child) => (
