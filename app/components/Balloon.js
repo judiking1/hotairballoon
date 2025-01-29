@@ -20,7 +20,7 @@ export function Balloon(props) {
       {...props}
       dispose={null}
       ref={groupRef}
-      scale={hovered ? 1.1 : 1}
+      scale={hovered ? 110 : 100}
       onClick={() => setActive(!active)}
       onPointerOver={() => setHover(true)}
       onPointerOut={() => setHover(false)}

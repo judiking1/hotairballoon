@@ -4,10 +4,10 @@ import { useGLTF } from '@react-three/drei'
 export default function Castle(props) {
   const { nodes, materials } = useGLTF('/model/terrain/castle.glb')
   return (
-    <group {...props} dispose={null}>
-      <group rotation={[-Math.PI / 2, 0, 0]} scale={0.023}>
+    <group {...props} dispose={null} frustumCulled={false}>
+      <group rotation={[-Math.PI / 2, 0, 0]} >
         <group rotation={[Math.PI / 2, 0, 0]}>
-          <group rotation={[-Math.PI / 2, 0, -Math.PI / 2]} scale={100}>
+          <group rotation={[-Math.PI / 2, 0, -Math.PI / 2]} >
             <mesh geometry={nodes.meshNode_Material_u1_v1_0.geometry} material={materials.Material_u1_v1} />
             <mesh geometry={nodes.meshNode_Material_u1_v1_0_1.geometry} material={materials.Material_u1_v1} />
             <mesh geometry={nodes.meshNode_Material_u1_v1_0_2.geometry} material={materials.Material_u1_v1} />
