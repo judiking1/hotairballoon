@@ -2,6 +2,7 @@
 
 import { Canvas } from '@react-three/fiber';
 import {
+  Bounds,
   Bvh,
   Cloud,
   Clouds,
@@ -15,7 +16,7 @@ import { random } from 'maath';
 import { MeshLambertMaterial, NoToneMapping } from 'three';
 import { BalloonNear } from './components/BalloonNear';
 import { balloonsFarData, balloonsNearData } from './components/balloonsData';
-import { BalloonFar } from './components/BalloonFar';
+import BalloonFar from './components/BalloonFar';
 
 const box = random.inBox(new Float32Array(20 * 3), { sides: [4, 1, 4] });
 const spherical = random.onSphere(box, { radius: 1 });
@@ -52,7 +53,7 @@ export default function IndexPage() {
         mieDirectionalG={0.8} // 미 산란 방향성
       />
       <Clouds scale={1} limit={spherical.length} material={MeshLambertMaterial}>
-        <Float floatIntensity={4} rotationIntensity={1}>
+        <Float floatIntensity={2} rotationIntensity={1}>
           <Cloud
             segments={spherical.length}
             seed={1}
@@ -71,7 +72,9 @@ export default function IndexPage() {
           <BalloonFar key={idx} {...props} />
         ))}
         {balloonsNearData.map((props, idx) => (
-          <BalloonNear key={idx} {...props} />
+          <Bounds key={idx}>
+            <BalloonNear {...props} />
+          </Bounds>
         ))}
       </Bvh>
       <ambientLight intensity={5.5} />
