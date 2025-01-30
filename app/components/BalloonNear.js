@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import { MathUtils } from 'three';
@@ -14,11 +14,28 @@ export function BalloonNear({
   rotationSpeed = 0.8,
 }) {
   const groupRef = useRef(null);
+  const hoverTimeout = useRef();
   const { scene } = useGLTF(modelPath);
-
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
+  const clonedChildren = useMemo(() => {
+    return scene.children.map((child) => child.clone());
+  }, [scene]);
 
+  const handlePointerEnter = (e) => {
+    e.stopPropagation();
+    clearTimeout(hoverTimeout.current);
+    setHover(true);
+  };
+  const handlePointerLeave = (e) => {
+    e.stopPropagation();
+    hoverTimeout.current = setTimeout(() => setHover(false), 100); // 100ms delay
+  };
+  useEffect(() => {
+    return () => {
+      clearTimeout(hoverTimeout.current);
+    };
+  }, []);
   useEffect(() => {
     document.body.style.cursor = hovered ? 'pointer' : 'auto';
   }, [hovered]);
@@ -51,14 +68,14 @@ export function BalloonNear({
     <group
       ref={groupRef}
       dispose={null}
-      onPointerEnter={(e) => (e.stopPropagation(), setHover(true))}
-      onPointerLeave={(e) => setHover(false)}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
       onClick={() => {
         setActive(!active);
       }}
     >
-      {scene.children.map((child) => (
-        <primitive key={child.uuid} object={child.clone()} />
+      {clonedChildren.map((child) => (
+        <primitive key={child.uuid} object={child} />
       ))}
     </group>
   );
